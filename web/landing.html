@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peaksnip: AI Clip Maker for Twitch, Kick &amp; YouTube Live Streams</title>
+<meta name="description" content="Peaksnip clips Twitch, Kick and YouTube live streams while they're still live. AI finds the best moments and turns them into captioned vertical Shorts, Reels and TikToks. Free and open source.">
+<link rel="canonical" href="{{SITE}}/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#0E0E0E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Peaksnip">
+<meta property="og:url" content="{{SITE}}/">
+<meta property="og:title" content="Peaksnip: clip live streams while they're still live">
+<meta property="og:description" content="AI stream clipper for Twitch, Kick and YouTube. Captioned vertical clips for Shorts, Reels and TikTok. Free and open source, on your own AI key.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Peaksnip: clip live streams while they're still live">
+<meta name="twitter:description" content="AI stream clipper for Twitch, Kick and YouTube. Captioned vertical clips. Free and open source.">
+<link rel="icon" type="image/svg+xml" href="/brand/favicon.svg?v=3">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Peaksnip", "applicationCategory": "MultimediaApplication", "operatingSystem": "Web browser", "url": "{{SITE}}/", "image": "{{SITE}}/brand/logo.svg?v=2", "description": "Free, open source AI clip maker that turns Twitch, Kick and YouTube live streams and videos into captioned vertical clips for YouTube Shorts, Instagram Reels and TikTok.", "isAccessibleForFree": true, "featureList": ["Clips live streams while they are live", "AI picks the best moments", "Word-by-word captions", "Vertical 9:16 clips", "Twitch, Kick and YouTube", "Posts to YouTube Shorts and Instagram Reels", "Works with your own AI key"]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Peaksnip", "url": "{{SITE}}/", "logo": "{{SITE}}/brand/logo.svg?v=2"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Peaksnip free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Peaksnip is free and open source. You run it on your own computer or server, and there are no plans or fees."}}, {"@type": "Question", "name": "Which AI does it use?", "acceptedAnswer": {"@type": "Answer", "text": "Your own. Add an API key for Gemini, OpenAI, Grok, Claude or OpenRouter, or point it at a local model. Whatever the AI costs is between you and that provider."}}, {"@type": "Question", "name": "What happens without an AI key?", "acceptedAnswer": {"@type": "Answer", "text": "Peaksnip still makes clips, picking the loudest moments that have speech in them. Add a key and the AI chooses the moments and writes the hooks and titles."}}, {"@type": "Question", "name": "Which videos work best?", "acceptedAnswer": {"@type": "Answer", "text": "Anything with people talking and reacting: live streams, gaming VODs, podcasts, interviews. Links can be from YouTube, Twitch or Kick, or you can upload a video file. Captions are written from English speech."}}, {"@type": "Question", "name": "How long are the clips, and what shape?", "acceptedAnswer": {"@type": "Answer", "text": "Vertical 9:16, the shape Shorts, Reels and TikTok use. They run 15 to 60 seconds by default and you can set your own range. Choose a blurred fill, a zoomed frame or a centre crop."}}, {"@type": "Question", "name": "Can I change a clip afterwards?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Open any clip to trim the start and end, rewrite the hook and title, or switch caption style and layout, then re-make it."}}, {"@type": "Question", "name": "Can I clip any streamer?", "acceptedAnswer": {"@type": "Answer", "text": "Peaksnip is a tool. You are responsible for having the right to clip and post a creator's content; most clipping programs ask you to follow the creator's own rules."}}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Poppins:wght@800&family=Anton&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add("js"); try { document.documentElement.dataset.theme = localStorage.getItem("peakcut_theme") || "dark"; } catch { document.documentElement.dataset.theme = "dark"; }</script>
+<script src="/assets/bits.js?v=3" defer></script>
+<script src="/assets/film.js?v=11" defer></script>
+<style>
+/* Peaksnip landing. One idea, carried by the 3D film at the top: a stream becomes clips. Everything else stays
+   quiet: near-black and greys, a single emerald for what matters, Geist for words and Geist Mono for labels. */
+:root{color-scheme:dark;
+  --bg:#0E0E0E;--bg-2:#121212;--card:#141414;--card-2:#181818;--line:#222222;--line-2:#2B2B2B;--line-3:#3A3A3A;
+  --text:#E8E8E8;--strong:#FAFAFA;--dim:#9B9B9B;--faint:#666666;
+  --brand:#3ECF8E;--brand-press:#24B47E;--brand-hi:#4BD69A;--on-brand:#0E0E0E;--live:#E5323F;--bm-ink:#0E0E0E;
+  --nav:rgba(14,14,14,.72);--shadow:0 30px 80px -20px rgba(0,0,0,.7);
+  --mono:"Geist Mono",ui-monospace,Menlo,Consolas,monospace;--ease:cubic-bezier(.2,.7,.2,1)}
+:root[data-theme=light]{color-scheme:light;
+  --bg:#FFFFFF;--bg-2:#FAFAFA;--card:#FFFFFF;--card-2:#FAFAFA;--line:#ECECEC;--line-2:#E0E0E0;--line-3:#C9C9C9;
+  --text:#1A1A1A;--strong:#111111;--dim:#6B6B6B;--faint:#9A9A9A;--on-brand:#111111;--bm-ink:#FFFFFF;
+  --nav:rgba(255,255,255,.78);--shadow:0 30px 80px -30px rgba(0,0,0,.25)}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+[id]{scroll-margin-top:72px}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 "Geist","Segoe UI",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,p{margin:0}
+a{color:inherit}
+svg{width:18px;height:18px;flex:none;fill:currentColor}
+::selection{background:rgba(62,207,142,.35);color:var(--strong)}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+.eyebrow{font:500 12px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.eyebrow b{color:var(--brand);font-weight:500}
+h2{font-size:clamp(30px,4vw,52px);font-weight:500;letter-spacing:-.035em;line-height:1.05;color:var(--strong)}
+h2 .q{color:var(--faint)}
+
+.brand{display:inline-flex;align-items:center;gap:9px;font:600 18px/1 "Geist",sans-serif;letter-spacing:-.025em;color:var(--strong);text-decoration:none;white-space:nowrap}
+.brand .bm{width:24px;height:24px;flex:none}.brand .bm rect{fill:currentColor}
+.brand .bm path{fill:none;stroke:var(--bm-ink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}.brand .bm circle{fill:var(--brand)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border-radius:6px;border:1px solid var(--line-2);
+  background:transparent;color:var(--text);font:inherit;font-size:14px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap;
+  transition:background-color .15s ease,border-color .15s ease,color .15s ease}
+.btn:hover{border-color:var(--line-3);color:var(--strong)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.btn.primary:hover{background:var(--brand-hi);border-color:var(--brand-hi)}
+.btn.primary:active{background:var(--brand-press)}
+.btn svg{width:16px;height:16px}
+.icon-btn{width:36px;height:36px;display:grid;place-items:center;border-radius:6px;border:0;background:transparent;color:var(--dim);cursor:pointer;transition:color .15s ease}
+.icon-btn:hover{color:var(--strong)}
+.theme-btn .sun{display:none}:root:not([data-theme=light]) .theme-btn .sun{display:block}:root:not([data-theme=light]) .theme-btn .moon{display:none}
+.js .reveal{opacity:0;transform:translateY(18px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--d,0s)}
+.js .reveal.in{opacity:1;transform:none}
+
+/* nav */
+header.nav{position:fixed;inset:0 0 auto;z-index:40;background:var(--nav);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);border-bottom:1px solid transparent;transition:border-color .2s ease}
+header.nav.stuck{border-color:var(--line)}
+header.nav .wrap{display:flex;align-items:center;gap:26px;height:60px;max-width:1280px}
+header.nav nav{display:flex;gap:4px;flex:1;font-size:14px}
+header.nav nav a{text-decoration:none;color:var(--dim);padding:6px 10px;transition:color .15s ease}
+header.nav nav a:hover{color:var(--strong)}
+header.nav .right{display:flex;align-items:center;gap:6px;margin-left:auto}
+header.nav .signin{white-space:nowrap;font-size:14px;text-decoration:none;color:var(--text);padding:8px 10px}
+header.nav .signin:hover{color:var(--strong)}
+@media (max-width:820px){header.nav nav{display:none}}
+
+/* ---------- the film */
+#film{position:relative;height:620vh}
+.pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.pin::before{content:"";position:absolute;left:50%;top:-10%;width:1200px;max-width:120%;height:70%;transform:translateX(-50%);pointer-events:none;z-index:0;
+  background:radial-gradient(50% 50% at 50% 30%,rgba(62,207,142,.07),transparent 70%)}
+#stage{position:absolute;inset:0}
+.pin::after{content:"";position:absolute;inset:auto 0 0;height:22vh;background:linear-gradient(transparent,var(--bg));pointer-events:none}
+.chap{position:absolute;z-index:3;opacity:0;pointer-events:none;will-change:opacity,transform}
+.chap.on{pointer-events:auto}
+.chap.c0{inset:clamp(88px,14vh,170px) 0 auto;text-align:center;padding:0 24px}
+.c0 h1{font-size:clamp(40px,min(7.4vw,10vh),96px);font-weight:500;letter-spacing:-.045em;line-height:.98;color:var(--strong);margin-top:18px}
+.c0 h1 span{display:block;color:var(--faint)}
+.c0 .lede{font-size:18px;color:var(--dim);max-width:540px;margin:min(24px,3vh) auto min(30px,3.6vh);line-height:1.55}
+.ask{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+.bar{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line-2);border-radius:8px;padding:4px;flex:0 1 520px;box-shadow:var(--shadow);transition:border-color .2s ease,box-shadow .2s ease}
+.bar:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px rgba(62,207,142,.15),var(--shadow)}
+.bar form{display:flex;gap:6px;align-items:center;flex:1}
+.bar label{flex:1;display:flex;align-items:center;gap:10px;padding:0 6px 0 12px;min-width:0}
+.bar label svg{color:var(--faint);width:17px;height:17px}
+.bar input{flex:1;min-width:0;height:40px;border:0;outline:0;background:transparent;color:var(--text);font:inherit;font-size:15px}
+.bar input::placeholder{color:var(--faint)}
+.c0 .note{font:12px var(--mono);color:var(--faint);margin-top:14px;letter-spacing:.02em}
+.chap.cn{left:clamp(24px,6vw,96px);bottom:clamp(64px,13vh,140px);max-width:440px}
+.cn .eyebrow{display:flex;align-items:center;gap:10px}
+.cn .eyebrow i{width:28px;height:1px;background:var(--line-3)}
+.cn h2{font-size:clamp(30px,3.6vw,48px);margin:14px 0 14px}
+.cn p{color:var(--dim);font-size:17px;line-height:1.55}
+.cn p b{color:var(--strong);font-weight:500}
+.rail{opacity:0;position:absolute;z-index:3;right:clamp(20px,4vw,56px);top:50%;transform:translateY(-50%);list-style:none;margin:0;padding:0;display:grid;gap:14px;font:12px var(--mono);color:var(--faint);transition:opacity .4s ease}
+.rail li{display:flex;align-items:center;gap:10px;justify-content:flex-end;transition:color .3s ease}
+.rail li::after{content:"";width:18px;height:1px;background:currentColor;transition:width .3s ease}
+.rail li.on{color:var(--strong)}.rail li.on::after{width:36px;background:var(--brand)}
+.cue{position:absolute;z-index:3;left:50%;bottom:28px;transform:translateX(-50%);font:12px var(--mono);color:var(--faint);display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity .4s ease}
+.cue i{width:1px;height:34px;background:linear-gradient(var(--faint),transparent);animation:cue 1.8s var(--ease) infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+/* a soft shade behind the chapter text, so the scene never fights the words */
+.shade{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .5s ease;
+  background:linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 82%,transparent) 26%,color-mix(in srgb,var(--bg) 35%,transparent) 46%,transparent 62%),
+  linear-gradient(0deg,color-mix(in srgb,var(--bg) 70%,transparent) 0%,transparent 45%)}
+@media (max-width:760px){.rail{display:none}.chap.cn{left:20px;right:20px;bottom:56px}.cn p{font-size:15px}.c0 .lede{font-size:16px}
+  .shade{background:linear-gradient(0deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 88%,transparent) 30%,transparent 50%)}}
+/* without scripts the chapters are simply read one after another */
+.nogl #film,html:not(.js) #film{height:auto}
+.nogl .pin,html:not(.js) .pin{position:static;height:auto;overflow:visible;padding:120px 0 40px}
+.nogl #stage,.nogl .rail,.nogl .cue,.nogl .shade,html:not(.js) #stage{display:none}
+.nogl .chap,html:not(.js) .chap{position:static;opacity:1;pointer-events:auto;margin:0 auto 72px;max-width:640px;padding:0 24px}
+
+/* the timeline in 3D (built by film.js) */
+.f-scene{position:absolute;inset:0;overflow:hidden;perspective:1500px;perspective-origin:50% 42%}
+.f-cam,.f-track{position:absolute;left:0;top:0;transform-style:preserve-3d;will-change:transform}
+.f-frame{position:absolute;top:0;width:168px;height:95px;border-radius:5px;overflow:hidden;border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 10px 24px -12px rgba(0,0,0,.8);transition:opacity .45s ease,border-color .3s ease,box-shadow .3s ease}
+.f-frame.off,.f-tick.off,.f-bar.off{opacity:0!important}
+.f-frame.picked{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand),0 0 30px -6px rgba(62,207,142,.6)}
+/* stream frame art: a lit scene, a figure, chat down the side, the streamer's webcam */
+.f-frame .s{position:absolute;inset:0;background:
+  radial-gradient(70% 70% at var(--lx) 22%,rgba(255,255,255,.26),transparent 65%),
+  radial-gradient(40% 30% at calc(100% - var(--lx)) 58%,var(--glow),transparent 70%),
+  linear-gradient(transparent 63%,rgba(0,0,0,.42) 63%),
+  linear-gradient(transparent 55%,rgba(255,255,255,.05) 55% 56%,transparent 56%)}
+.f-frame .p{position:absolute;left:var(--px);bottom:30%;width:10%;height:34%;
+  background:radial-gradient(circle at 50% 18%,rgba(255,255,255,.75) 0 15%,transparent 16%),radial-gradient(ellipse 50% 46% at 50% 100%,rgba(255,255,255,.55) 0 98%,transparent 100%)}
+.f-frame .chat{position:absolute;right:4%;top:8%;width:24%;height:44%;background:rgba(255,255,255,.32);
+  -webkit-mask-image:repeating-linear-gradient(180deg,#000 0 2px,transparent 2px 6px),linear-gradient(90deg,#000 55%,transparent);-webkit-mask-composite:source-in;
+  mask-image:repeating-linear-gradient(180deg,#000 0 2px,transparent 2px 6px),linear-gradient(90deg,#000 55%,transparent);mask-composite:intersect}
+.f-frame .cam{position:absolute;right:4%;bottom:6%;width:26%;height:34%;border-radius:3px;border:1px solid rgba(255,255,255,.25);
+  background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.55) 0 17%,transparent 18%),radial-gradient(ellipse 44% 38% at 50% 100%,rgba(255,255,255,.35) 0 97%,transparent 100%),linear-gradient(160deg,#2a2a2e,#121214)}
+.v0{background:linear-gradient(160deg,#1E4A40 0%,#0F2420 55%,#091412 100%);--lx:26%;--px:30%;--glow:rgba(62,207,142,.35)}
+.v1{background:linear-gradient(160deg,#2D336B 0%,#151A3D 55%,#0B0D20 100%);--lx:66%;--px:46%;--glow:rgba(120,140,255,.35)}
+.v2{background:linear-gradient(160deg,#5A3A1E 0%,#2B1B0E 55%,#140C06 100%);--lx:40%;--px:22%;--glow:rgba(255,170,80,.32)}
+.v3{background:linear-gradient(160deg,#55204D 0%,#2A0F27 55%,#140713 100%);--lx:70%;--px:52%;--glow:rgba(255,90,180,.32)}
+.f-tick{position:absolute;top:-30px;height:14px;line-height:14px;padding-left:6px;border-left:1px solid var(--line-3);font:10px var(--mono);color:var(--faint);white-space:nowrap;transition:opacity .45s ease}
+.f-bar{position:absolute;top:141px;width:4px;border-radius:2px;background:var(--line-3);transform:translateY(-50%);transition:background-color .25s ease,opacity .45s ease}
+.f-bar.near{background:var(--text)}
+.f-bar.hot{background:var(--brand);box-shadow:0 0 10px rgba(62,207,142,.5)}
+.f-seg{position:absolute;top:0;height:95px;pointer-events:none}
+.f-sel{position:absolute;top:-52px;height:2px;background:var(--brand);opacity:0;transition:opacity .35s ease}
+.f-sel::before,.f-sel::after{content:"";position:absolute;top:0;width:2px;height:200px;background:linear-gradient(var(--brand),transparent)}
+.f-sel::before{left:0}.f-sel::after{right:0}
+.f-sel span{position:absolute;bottom:8px;left:0;font:500 11px var(--mono);color:var(--brand);background:var(--bg);padding:4px 8px;border:1px solid rgba(62,207,142,.4);border-radius:4px;white-space:nowrap}
+.f-head{position:absolute;top:-40px;left:0;width:0;height:222px;border-left:2px solid var(--strong);transition:opacity .3s ease}
+.f-head span{position:absolute;top:-22px;left:0;transform:translateX(-50%);font:500 10px var(--mono);background:var(--strong);color:var(--bg);padding:4px 7px;border-radius:3px;white-space:nowrap}
+.f-head.live{border-color:var(--live)}.f-head.live span{background:var(--live);color:#fff}
+.f-front{position:absolute;inset:0;perspective:1200px;pointer-events:none;z-index:2}
+.f-clip{position:absolute;left:0;top:0;overflow:hidden;visibility:hidden;border:1px solid var(--line-3);background:#000;box-shadow:var(--shadow);will-change:transform,width,height}
+.f-clip .strip{position:absolute;inset:0;display:flex}
+.f-clip .strip .f-frame{position:relative;flex:1;width:auto;height:100%;border:0;border-radius:0;box-shadow:none}
+.f-plat{position:absolute;left:50%;bottom:12px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font:500 11px var(--mono);color:#fff;background:rgba(10,10,10,.82);border:1px solid rgba(255,255,255,.14);padding:5px 9px;border-radius:999px;opacity:0}
+.f-plat svg{width:12px;height:12px;color:var(--brand)}
+/* caption previews: the stream in the middle, a blurred copy filling the phone */
+.cphone{position:absolute;inset:0;overflow:hidden;background:#000;container-type:inline-size}
+.cphone .f-frame{position:absolute;left:0;width:100%;height:auto;aspect-ratio:16/9;border:0;border-radius:0;box-shadow:none}
+.cphone .mid{top:50%;transform:translateY(-50%);box-shadow:0 0 0 1px rgba(255,255,255,.06)}
+.cphone .bgf{top:-12%;left:-12%;width:124%;height:124%;aspect-ratio:auto;filter:blur(14px) brightness(.55) saturate(1.3)}
+.cphone .hook{position:absolute;left:50%;top:16%;transform:translateX(-50%);font:800 6.6cqw/1.2 "Poppins",sans-serif;text-transform:uppercase;letter-spacing:.01em;
+  color:#0E1014;background:#fff;padding:2.2cqw 4cqw;border-radius:2.8cqw;white-space:nowrap}
+.cphone .cap{position:absolute;left:3%;right:3%;top:72%;transform:translateY(-50%);text-align:center;color:#fff;line-height:1.08;paint-order:stroke fill;-webkit-text-stroke:1.7cqw #000}
+.cphone .cap span{display:inline-block;margin:0 .14em;transition:transform .12s ease,color .12s ease}
+.cphone[data-style=bounce] .cap{font:800 10.5cqw "Poppins",sans-serif}
+.cphone[data-style=bounce] .cap .on{color:#FFF000;transform:scale(1.12)}
+.cphone[data-style=hype] .cap{font:400 15cqw "Anton",sans-serif;letter-spacing:.01em}
+.cphone[data-style=hype] .cap .st{color:#FFD700}
+.cphone[data-style=hype] .cap .on{color:#FF3C3C;transform:scale(1.14)}
+.cphone[data-style=clean] .cap{font:800 8cqw "Poppins",sans-serif;-webkit-text-stroke-width:1.2cqw}
+.cphone[data-style=clean] .cap .on{color:#FFD76B;transform:scale(1.06)}
+.f-clip .cphone{opacity:0}
+
+/* ---------- sections after the film */
+section.s{padding:120px 0;position:relative}
+.head{display:grid;grid-template-columns:1fr 1fr;gap:20px 64px;align-items:end;margin-bottom:56px}
+.head p{color:var(--dim);font-size:17px;max-width:480px}
+@media (max-width:860px){.head{grid-template-columns:1fr}section.s{padding:88px 0}}
+/* product preview, tilted back until it scrolls into place */
+.shot{perspective:1600px}
+.win{border:1px solid var(--line-2);border-radius:12px;background:var(--bg-2);overflow:hidden;box-shadow:var(--shadow);
+  transform:rotateX(calc(var(--tilt,1) * 22deg)) scale(calc(1 - var(--tilt,1) * .06));transform-origin:50% 0;will-change:transform}
+.win .top{display:flex;align-items:center;gap:6px;height:38px;padding:0 14px;border-bottom:1px solid var(--line)}
+.win .top i{width:10px;height:10px;border-radius:50%;background:var(--line-3)}
+.win .top span{margin:0 auto;font:12px var(--mono);color:var(--faint)}
+.ui{display:grid;grid-template-columns:190px 1fr;min-height:470px}
+.ui aside{border-right:1px solid var(--line);padding:14px 10px;display:flex;flex-direction:column;gap:2px;font-size:13px}
+.ui aside .brand{font-size:14px;padding:4px 10px 12px}.ui aside .brand .bm{width:18px;height:18px}
+.ui aside b{font:500 11px var(--mono);color:var(--faint);text-transform:uppercase;letter-spacing:.06em;padding:14px 10px 6px}
+.ui aside span{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:6px;color:var(--dim)}
+.ui aside span.on{background:var(--card-2);color:var(--strong)}
+.ui aside span svg{width:15px;height:15px}
+.ui aside em{margin-left:auto;font:normal 11px var(--mono);color:var(--faint)}
+.ui aside .dot{width:7px;height:7px;border-radius:50%;background:var(--live);margin-left:auto}
+.ui main{padding:22px 24px;min-width:0}
+.ui .vh{display:flex;align-items:center;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.ui .vh .th{position:relative;width:96px;aspect-ratio:16/9;border-radius:6px;overflow:hidden;flex:none}
+.ui .vh .th .f-frame{position:absolute;inset:0;width:100%;height:100%;border:0;box-shadow:none}
+.ui .vh h4{margin:0;font-size:15px;font-weight:500;color:var(--strong)}
+.ui .vh small{font:12px var(--mono);color:var(--faint)}
+.ui .vh .st{margin-left:auto;font:12px var(--mono);color:var(--brand)}
+.clips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:18px}
+.clip{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card)}
+.clip .v{position:relative;aspect-ratio:9/13}
+.clip .m{padding:10px 12px}
+.clip .m b{display:block;font-size:12px;font-weight:500;color:var(--strong);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.clip .m small{font:11px var(--mono);color:var(--faint)}
+.clip .sc{position:absolute;z-index:2;top:8px;left:8px;font:500 10px var(--mono);color:#fff;background:rgba(0,0,0,.55);padding:2px 5px;border-radius:3px}
+@media (max-width:860px){.ui{grid-template-columns:1fr}.ui aside{display:none}.clips{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* spec sheet */
+.specs{border-top:1px solid var(--line)}
+.specs div{display:grid;grid-template-columns:240px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid var(--line)}
+.specs dt{font:500 12px/1.9 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--faint)}
+.specs dd{margin:0;color:var(--text);font-size:16px}
+.specs dd span{color:var(--dim)}
+@media (max-width:640px){.specs div{grid-template-columns:1fr;gap:6px}}
+/* caption styles */
+.reel{display:flex;justify-content:center;align-items:flex-end;gap:clamp(12px,3vw,36px);perspective:1400px}
+.reel figure{margin:0;flex:0 1 220px;display:flex;flex-direction:column;align-items:center;gap:14px;transition:transform .7s var(--ease)}
+.reel figure:first-child{transform:rotateY(16deg)}.reel figure:last-child{transform:rotateY(-16deg)}
+.reel figure.mid{flex-basis:250px}
+.reel:hover figure{transform:none}
+.phone{position:relative;width:100%;aspect-ratio:9/16;border-radius:22px;overflow:hidden;background:#000;border:6px solid #1a1a1a;box-shadow:0 0 0 1px var(--line-2),var(--shadow)}
+.reel figcaption{font:12px var(--mono);color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+/* faq */
+.faq{display:grid;grid-template-columns:1fr 1.5fr;gap:56px}
+details{border-top:1px solid var(--line);padding:20px 0}
+details:last-child{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:20px;font-size:17px;font-weight:500;color:var(--strong)}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:400 20px/1 var(--mono);color:var(--faint);transition:transform .25s ease,color .25s ease}
+details[open] summary::after{transform:rotate(45deg);color:var(--brand)}
+details p{color:var(--dim);margin-top:12px;max-width:620px}
+@media (max-width:860px){.faq{grid-template-columns:1fr;gap:24px}}
+/* closing + footer */
+.closing{text-align:center;border-top:1px solid var(--line);overflow:hidden}
+.closing::before{content:"";position:absolute;left:50%;top:0;width:900px;max-width:100%;height:100%;transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(50% 60% at 50% 100%,rgba(62,207,142,.08),transparent 70%)}
+.closing .wrap{position:relative}
+.closing h2{font-size:clamp(34px,5vw,68px)}
+.closing p{color:var(--dim);font-size:17px;margin:18px auto 34px;max-width:520px}
+.closing .ask{max-width:640px;margin:0 auto}
+footer{border-top:1px solid var(--line);padding:48px 0 36px;font-size:14px;color:var(--dim)}
+footer .row{display:flex;flex-wrap:wrap;gap:24px 48px;align-items:flex-start;justify-content:space-between}
+footer .brand{margin-bottom:12px}
+footer ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 22px}
+footer ul a{text-decoration:none}footer ul a:hover{color:var(--strong)}
+footer .fine{margin-top:36px;font:12px var(--mono);color:var(--faint)}footer .fine a{color:inherit;text-underline-offset:3px}footer .fine a:hover{color:var(--strong)}
+header.nav .gh svg{width:17px;height:17px}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.js .reveal{opacity:1;transform:none}.win{transform:none}}
+</style>
+</head>
+<body>
+<header class="nav" id="nav"><div class="wrap">
+  <a class="brand" href="/" aria-label="Peaksnip home"><svg class="bm" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M7 21.5 12.2 15.2 15.4 18.4 19.6 10"/><path d="M21.4 13.8 25 21.5"/><circle cx="19.6" cy="10" r="2.4"/></svg><span>Peaksnip</span></a>
+  <nav aria-label="Sections"><a href="#film">How it works</a><a href="#product">Product</a><a href="#specs">Specs</a><a href="#faq">FAQ</a></nav>
+  <div class="right">
+    <!--repo--><a class="icon-btn gh" href="{{REPO}}" target="_blank" rel="noopener" aria-label="Peaksnip on GitHub" title="Peaksnip on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a><!--/repo-->
+    <button class="icon-btn theme-btn" type="button" data-theme-toggle aria-label="Switch light or dark mode"><svg class="moon" viewBox="0 0 256 256" aria-hidden="true"><path d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z"/></svg><svg class="sun" viewBox="0 0 256 256" aria-hidden="true"><path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"/></svg></button>
+    <a class="signin" href="/login" data-auth="in">Sign in</a>
+    <a class="btn primary" href="/signup" data-auth="up">Start clipping</a>
+  </div>
+</div></header>
+
+<main>
+<section id="film" aria-label="How Peaksnip turns a stream into clips">
+  <div class="pin">
+    <div id="stage" aria-hidden="true"></div>
+    <div class="shade" id="shade" aria-hidden="true"></div>
+
+    <div class="chap c0" data-c="0">
+      <p class="eyebrow">Free, open source, <b>runs on your machine</b></p>
+      <h1>Long streams in.<span>Short clips out.</span></h1>
+      <p class="lede">Peaksnip watches a stream or a video for you, finds the moments worth posting and hands them back as captioned vertical clips.</p>
+      <div class="ask"><div class="bar"><form class="linkform">
+        <label><svg viewBox="0 0 256 256" aria-hidden="true"><path d="M165.66,90.34a8,8,0,0,1,0,11.32l-64,64a8,8,0,0,1-11.32-11.32l64-64A8,8,0,0,1,165.66,90.34ZM215.6,40.4a56,56,0,0,0-79.2,0L106.34,70.45a8,8,0,0,0,11.32,11.32l30.06-30a40,40,0,0,1,56.57,56.56l-30.07,30.06a8,8,0,0,0,11.31,11.32L215.6,119.6a56,56,0,0,0,0-79.2ZM138.34,174.22l-30.06,30.06a40,40,0,1,1-56.56-56.57l30.05-30.05a8,8,0,0,0-11.32-11.32L40.4,136.4a56,56,0,0,0,79.2,79.2l30.06-30.07a8,8,0,0,0-11.32-11.31Z"/></svg><input name="link" type="url" inputmode="url" placeholder="Paste a YouTube, Twitch or Kick link" autocomplete="off" aria-label="Video link"></label>
+        <button class="btn primary">Get clips <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></button></form></div></div>
+      <p class="note">or <a href="/signup" data-auth="up2">upload a video file</a></p>
+    </div>
+
+    <div class="chap cn" data-c="1">
+      <p class="eyebrow"><i></i>01 &nbsp;Record</p>
+      <h2>It is recording before you are awake.</h2>
+      <p>Add a streamer once. When they go live, Peaksnip <b>starts recording by itself</b> and keeps the last stretch of stream, checking it as often as every minute.</p>
+    </div>
+    <div class="chap cn" data-c="2">
+      <p class="eyebrow"><i></i>02 &nbsp;Find</p>
+      <h2>Two judges, <span class="q">one verdict.</span></h2>
+      <p>One AI reads only what was said. Another hears only how loud it got and how busy chat was. <b>A moment is kept when both agree</b>, so you get reactions, not filler.</p>
+    </div>
+    <div class="chap cn" data-c="3">
+      <p class="eyebrow"><i></i>03 &nbsp;Cut</p>
+      <h2>Each moment becomes a vertical clip.</h2>
+      <p>Cut on a finished sentence, framed for 9:16, with <b>word-by-word captions</b> and a hook line on top. A title, description and hashtags come with it.</p>
+    </div>
+    <div class="chap cn" data-c="4">
+      <p class="eyebrow"><i></i>04 &nbsp;Post</p>
+      <h2>Straight to Shorts, Reels <span class="q">and TikTok.</span></h2>
+      <p>Connect your accounts once, then <b>queue or auto-post</b> with spacing and daily caps. Or download the files and post them yourself.</p>
+    </div>
+
+    <ol class="rail" id="rail" aria-hidden="true"><li data-c="1">Record</li><li data-c="2">Find</li><li data-c="3">Cut</li><li data-c="4">Post</li></ol>
+    <div class="cue" id="cue" aria-hidden="true">scroll<i></i></div>
+  </div>
+</section>
+
+<section class="s" id="product"><div class="wrap">
+  <div class="head">
+    <div><p class="eyebrow reveal">Product</p><h2 class="reveal" style="margin-top:14px">One place for every creator <span class="q">you clip.</span></h2></div>
+    <p class="reveal">Each creator gets a workspace with their own channels, caption style, clip length and posting rules. Videos wait in a fair queue, so one long stream never holds up the rest.</p>
+  </div>
+  <div class="shot"><div class="win" id="win" aria-hidden="true">
+    <div class="top"><i></i><i></i><i></i><span>127.0.0.1:8765</span></div>
+    <div class="ui">
+      <aside>
+        <span class="brand"><svg class="bm" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M7 21.5 12.2 15.2 15.4 18.4 19.6 10"/><path d="M21.4 13.8 25 21.5"/><circle cx="19.6" cy="10" r="2.4"/></svg><span>Peaksnip</span></span>
+        <span><svg viewBox="0 0 256 256" aria-hidden="true"><path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z"/></svg>Home</span><span class="on"><svg viewBox="0 0 256 256" aria-hidden="true"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM40,88h80v80H40Zm96-16V56h32V72Zm-16,0H88V56h32Zm0,112v16H88V184Zm16,0h32v16H136Zm0-16V88h80v80Zm80-96H184V56h32ZM72,56V72H40V56ZM40,184H72v16H40Zm176,16H184V184h32v16Z"/></svg>All videos<em>12</em></span>
+        <b>Creators</b>
+        <span><svg viewBox="0 0 256 256" aria-hidden="true"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg>kai_live<i class="dot"></i></span><span><svg viewBox="0 0 256 256" aria-hidden="true"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg>the late pod</span><span><svg viewBox="0 0 256 256" aria-hidden="true"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg>speedrun_mo</span>
+        <b>Posting</b>
+        <span><svg viewBox="0 0 256 256" aria-hidden="true"><path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.49,29.8L102,154l41.3,84.87A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14,0-.07-40.06-82.3,48-48a8,8,0,0,0-11.31-11.31l-48,48L24.08,98.25l-.07,0,.14,0L216,40Z"/></svg>Queue<em>5</em></span>
+      </aside>
+      <main>
+        <div class="vh"><span class="th"><div class="f-frame v1"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div></span><div><h4>Saturday stream, part 2</h4><small>kai_live · 3:58:12 · 9 clips</small></div><span class="st">done</span></div>
+        <div class="clips">
+          <div class="clip"><div class="v"><span class="sc">94</span><div class="cphone" data-style="bounce"><div class="f-frame v1 bgf"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div><div class="f-frame v1 mid"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div><span class="hook">Wait for it</span><div class="cap"></div></div></div><div class="m"><b>The shot nobody called</b><small>0:41 · bounce</small></div></div>
+          <div class="clip"><div class="v"><span class="sc">91</span><div class="cphone" data-style="hype"><div class="f-frame v3 bgf"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div><div class="f-frame v3 mid"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div><span class="hook">Chat lost it</span><div class="cap"></div></div></div><div class="m"><b>Chat goes silent</b><small>0:28 · hype</small></div></div>
+          <div class="clip"><div class="v"><span class="sc">88</span><div class="cphone" data-style="clean"><div class="f-frame v0 bgf"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div><div class="f-frame v0 mid"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div><span class="hook">Honest answer</span><div class="cap"></div></div></div><div class="m"><b>The question he dodged</b><small>0:52 · clean</small></div></div>
+          <div class="clip"><div class="v"><span class="sc">86</span><div class="cphone" data-style="bounce"><div class="f-frame v1 bgf"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div><div class="f-frame v1 mid"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div><span class="hook">Wait for it</span><div class="cap"></div></div></div><div class="m"><b>Who sold the run</b><small>0:33 · bounce</small></div></div>
+        </div>
+      </main>
+    </div>
+  </div></div>
+</div></section>
+
+<section class="s" id="specs" style="padding-top:40px"><div class="wrap">
+  <div class="head">
+    <div><p class="eyebrow reveal">Specs</p><h2 class="reveal" style="margin-top:14px">What it does, <span class="q">plainly.</span></h2></div>
+    <p class="reveal">No plans and no limits unless you set them. You bring the AI key and the machine; everything else is in the box.</p>
+  </div>
+  <dl class="specs reveal">
+    <div><dt>Clips from</dt><dd>YouTube, Twitch and Kick links, live or recorded <span>· or your own video files</span></dd></div>
+    <div><dt>Clips are</dt><dd>Vertical 9:16, 15 to 60 seconds by default <span>· blurred fill, zoomed frame or centre crop · 720p or 1080p</span></dd></div>
+    <div><dt>Captions</dt><dd>Word by word, in three styles, always in English <span>· other languages are translated, Hindi and Urdu in Roman letters</span></dd></div>
+    <div><dt>Picked by</dt><dd>Your own AI: Gemini, OpenAI, Grok, Groq, OpenRouter, Claude or a local model <span>· no key works too, by loudness</span></dd></div>
+    <div><dt>Speech to text</dt><dd>On your own machine <span>· audio never leaves it</span></dd></div>
+    <div><dt>Posts to</dt><dd>YouTube Shorts, Instagram Reels and TikTok <span>· queued or automatic, with spacing and daily caps</span></dd></div>
+    <div><dt>Runs on</dt><dd>Your computer, or one server with Docker <span>· sign-in and an admin dashboard when others use it</span></dd></div>
+    <div><dt>Licence</dt><dd>MIT <span>· read it, change it, host it</span></dd></div>
+  </dl>
+</div></section>
+
+<section class="s" id="styles" style="padding-top:40px"><div class="wrap">
+  <div class="head">
+    <div><p class="eyebrow reveal">Caption styles</p><h2 class="reveal" style="margin-top:14px">Three caption styles, <span class="q">word by word.</span></h2></div>
+    <p class="reveal">Pick one per creator and every clip follows it: the hook on top, each word lighting up as it is said. Shown in the blurred-fill layout.</p>
+  </div>
+  <div class="reel reveal">
+    <figure><div class="phone"><div class="cphone" data-style="bounce"><div class="f-frame v1 bgf"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div><div class="f-frame v1 mid"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div><span class="hook">Wait for it</span><div class="cap"></div></div></div><figcaption>Bounce</figcaption></figure>
+    <figure class="mid"><div class="phone"><div class="cphone" data-style="hype"><div class="f-frame v3 bgf"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div><div class="f-frame v3 mid"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div><span class="hook">Chat lost it</span><div class="cap"></div></div></div><figcaption>Hype</figcaption></figure>
+    <figure><div class="phone"><div class="cphone" data-style="clean"><div class="f-frame v0 bgf"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div><div class="f-frame v0 mid"><i class="s"></i><i class="p"></i><i class="chat"></i><i class="cam"></i></div><span class="hook">Honest answer</span><div class="cap"></div></div></div><figcaption>Clean</figcaption></figure>
+  </div>
+</div></section>
+
+<section class="s" id="faq" style="padding-top:40px"><div class="wrap faq">
+  <div><p class="eyebrow reveal">FAQ</p><h2 class="reveal" style="margin-top:14px">Questions, <span class="q">answered.</span></h2></div>
+  <div class="reveal">
+    <details open><summary>Is Peaksnip free?</summary><p>Yes. Peaksnip is free and open source. You run it on your own computer or server, and there are no plans or fees.</p></details>
+    <details><summary>Which AI does it use?</summary><p>Your own. Add an API key for Gemini, OpenAI, Grok, Claude or OpenRouter, or point it at a local model. Whatever the AI costs is between you and that provider.</p></details>
+    <details><summary>What happens without an AI key?</summary><p>Peaksnip still makes clips, picking the loudest moments that have speech in them. Add a key and the AI chooses the moments and writes the hooks and titles.</p></details>
+    <details><summary>Which videos work best?</summary><p>Anything with people talking and reacting: live streams, gaming VODs, podcasts, interviews. Links can be from YouTube, Twitch or Kick, or you can upload a video file. Captions are written from English speech.</p></details>
+    <details><summary>How long are the clips, and what shape?</summary><p>Vertical 9:16, the shape Shorts, Reels and TikTok use. They run 15 to 60 seconds by default and you can set your own range. Choose a blurred fill, a zoomed frame or a centre crop.</p></details>
+    <details><summary>Can I change a clip afterwards?</summary><p>Yes. Open any clip to trim the start and end, rewrite the hook and title, or switch caption style and layout, then re-make it.</p></details>
+    <details><summary>Can I clip any streamer?</summary><p>Peaksnip is a tool. You are responsible for having the right to clip and post a creator's content; most clipping programs ask you to follow the creator's own rules.</p></details>
+  </div>
+</div></section>
+
+<section class="s closing"><div class="wrap">
+  <h2 class="reveal">Your last stream <span class="q">is a week of clips.</span></h2>
+  <p class="reveal">Paste the link and see what it picks. Free and open source, on your own AI key.</p>
+  <div class="ask reveal"><div class="bar"><form class="linkform">
+    <label><svg viewBox="0 0 256 256" aria-hidden="true"><path d="M165.66,90.34a8,8,0,0,1,0,11.32l-64,64a8,8,0,0,1-11.32-11.32l64-64A8,8,0,0,1,165.66,90.34ZM215.6,40.4a56,56,0,0,0-79.2,0L106.34,70.45a8,8,0,0,0,11.32,11.32l30.06-30a40,40,0,0,1,56.57,56.56l-30.07,30.06a8,8,0,0,0,11.31,11.32L215.6,119.6a56,56,0,0,0,0-79.2ZM138.34,174.22l-30.06,30.06a40,40,0,1,1-56.56-56.57l30.05-30.05a8,8,0,0,0-11.32-11.32L40.4,136.4a56,56,0,0,0,79.2,79.2l30.06-30.07a8,8,0,0,0-11.32-11.31Z"/></svg><input name="link" type="url" inputmode="url" placeholder="Paste a YouTube, Twitch or Kick link" autocomplete="off" aria-label="Video link"></label>
+    <button class="btn primary">Get clips <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></button></form></div></div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div class="row">
+    <div><a class="brand" href="/" aria-label="Peaksnip home"><svg class="bm" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M7 21.5 12.2 15.2 15.4 18.4 19.6 10"/><path d="M21.4 13.8 25 21.5"/><circle cx="19.6" cy="10" r="2.4"/></svg><span>Peaksnip</span></a>
+      <p style="max-width:320px;margin:0">Captioned vertical clips from long streams and videos. Free and open source.</p></div>
+    <ul><li><a href="#film">How it works</a></li><li><a href="#product">Product</a></li><li><a href="#specs">Specs</a></li><li><a href="#faq">FAQ</a></li><!--repo--><li><a href="{{REPO}}" target="_blank" rel="noopener">GitHub</a></li><!--/repo--><li><a href="/signup">Create an account</a></li><li><a href="/login">Sign in</a></li><li><a href="/terms">Terms</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/acceptable-use">Acceptable use</a></li></ul>
+  </div>
+  <p class="fine">© <span class="fy"></span> Peaksnip · MIT licence<!--repo--> · <a href="{{REPO}}" target="_blank" rel="noopener">Source on GitHub</a><!--/repo--></p>
+</div></footer>
+
+<script>
+document.querySelectorAll(".fy").forEach(e => e.textContent = new Date().getFullYear());
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const navEl = $("#nav");
+
+// ---- the film: scroll position inside #film drives the scene and the chapter text
+const film = $("#film"), chaps = $$(".chap"), railItems = $$("#rail li"), cue = $("#cue");
+const END = 4.6;
+function progress() {
+  const r = film.getBoundingClientRect(), span = film.offsetHeight - innerHeight;
+  return span > 0 ? clamp(-r.top / span, 0, 1) * END : 0;
+}
+function chapters() {
+  const p = progress();
+  chaps.forEach(el => {
+    const c = Number(el.dataset.c), d = p - c;
+    // the hero shows from the start; the others fade in as their chapter arrives and out as it leaves
+    const o = c === 0 ? 1 - clamp((p - .18) / .3, 0, 1) : clamp((d + .42) / .22, 0, 1) * (1 - clamp((d - .38) / .2, 0, 1));
+    el.style.opacity = o.toFixed(3);
+    el.style.transform = `translateY(${(c === 0 ? -p * 60 : -d * 40).toFixed(1)}px)`;
+    el.classList.toggle("on", o > .5);
+  });
+  const cur = Math.round(p);
+  railItems.forEach(li => li.classList.toggle("on", Number(li.dataset.c) === cur));
+  $("#rail").style.opacity = p > .5 && p < END - .05 ? 1 : 0;
+  $("#shade").style.opacity = clamp((p - .45) / .3, 0, 1).toFixed(3);
+  cue.style.opacity = p < .12 ? 1 : 0;
+  navEl.classList.toggle("stuck", scrollY > film.offsetHeight - innerHeight - 10);
+}
+addEventListener("scroll", chapters, {passive: true}); addEventListener("resize", chapters); chapters();
+
+addEventListener("DOMContentLoaded", () => {
+  let ok = false;
+  try { ok = window.PeakFilm && PeakFilm.start($("#stage"), {progress}); } catch (e) { ok = false; }
+  if (!ok) document.documentElement.classList.add("nogl");
+  try { PeakFilm.captions(document); } catch {}
+  try { Bits.ThemeToggle("[data-theme-toggle]"); } catch {}
+});
+
+// ---- product preview: tilted back, settles flat as it scrolls into view
+const win = $("#win");
+function tilt() {
+  const r = win.getBoundingClientRect(), v = clamp((r.top - innerHeight * .15) / (innerHeight * .75), 0, 1);
+  win.style.setProperty("--tilt", v.toFixed(3));
+}
+addEventListener("scroll", tilt, {passive: true}); addEventListener("resize", tilt); tilt();
+
+// ---- things ease in as they scroll into view (scroll, a timer and an observer, so nothing stays hidden)
+let waiting = $$(".reveal");
+function check() {
+  const h = innerHeight || document.documentElement.clientHeight;
+  waiting = waiting.filter(e => { if (e.getBoundingClientRect().top < h * .9) { e.classList.add("in"); return false; } return true; });
+}
+addEventListener("scroll", check, {passive: true}); addEventListener("resize", check); addEventListener("load", check);
+const timer = setInterval(() => { check(); if (!waiting.length) clearInterval(timer); }, 400);
+try { const io = new IntersectionObserver(check, {threshold: [0, .1]}); waiting.forEach(e => io.observe(e)); } catch {}
+check();
+
+// ---- the link bar: remember the link, then sign up (or go straight in if already signed in)
+let signedIn = false;
+$$(".linkform").forEach(f => f.addEventListener("submit", e => {
+  e.preventDefault();
+  const v = f.link.value.trim();
+  try { if (v) sessionStorage.setItem("peakcut_link", v); } catch {}
+  location.href = signedIn ? "/app" : "/signup";
+}));
+fetch("/api/auth/me").then(r => r.json()).then(d => {
+  if (!d.user) return;
+  signedIn = true;
+  $$('[data-auth="in"]').forEach(e => e.remove());
+  $$('[data-auth="up"]').forEach(e => { e.href = "/app"; e.textContent = "Open Peaksnip"; });
+  $$('[data-auth="up2"]').forEach(e => { e.href = "/app"; });
+}).catch(() => {});
+</script>
+</body>
+</html>
